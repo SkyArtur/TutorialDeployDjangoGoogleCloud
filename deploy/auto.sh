@@ -31,11 +31,10 @@ python3 manage.py collectstatic
 python3 manage.py createsuperuser
 deactivate
 cd ~ || exit
-sudo mv -f ~/"$projeto"/deploy/temp/gunicorn.socket /etc/systemd/system
-sudo mv -f ~/"$projeto"/deploy/temp/gunicorn.service /etc/systemd/system
-sudo mv -f ~/"$projeto"/deploy/temp/"$projeto" /etc/nginx/sites-available
-sudo ln -s /etc/nginx/sites-available/"$projeto" /etc/nginx/sites-enabled
-sudo rm -rf ~/"$projeto"/deploy/temp
+sudo mv -f ~/"$projeto"/deploy/gunicorn.socket /etc/systemd/system
+sudo mv -f ~/"$projeto"/deploy/gunicorn.service /etc/systemd/system
+sudo mv -f ~/"$projeto"/deploy/site_django /etc/nginx/sites-available
+sudo ln -s /etc/nginx/sites-available/site_django /etc/nginx/sites-enabled
 sudo systemctl start gunicorn.socket
 sudo systemctl enable gunicorn.socket
 file /run/gunicorn.sock

@@ -6,7 +6,9 @@ server {
     location /staticfiles/ {
         root /home/NOME_USUARIO/PASTA_RAIZ_PROJETO;
     }
-
+    location /media {
+        alias /home/NOME_USUARIO/PASTA_RAIZ_PROJETO/media/;
+    }
     location / {
         include proxy_params;
         proxy_pass http://unix:/run/gunicorn.sock;

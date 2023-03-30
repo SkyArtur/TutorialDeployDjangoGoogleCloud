@@ -111,16 +111,16 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 Para saber mais sobre o WhiteNoise confira a <a href="https://whitenoise.readthedocs.io/en/latest/django.html">documentação.</a>
 
-* Criando arquivos necessários
+* Arquivos necessários
 
 Baixe este repósitorio e copie a pasta ``deploy`` para a pasta raiz do seu projeto django. Ela contém os arquivos
-``gunicorn.socket`` e ``gunicorn.service``, que são configurações para o nosso servidor wsgi, o arquivo ``site_django``,
-contém a configuração do servidor HTTP Nginx, e o arquivo ``auto.sh``', que é um shell script que realizara as instalações
+``gunicorn.socket`` e ``gunicorn.service``, que são configurações para o servidor wsgi Gunicorn, o arquivo ``site_django``,
+que contém a configuração do servidor HTTP Nginx, e o arquivo ``auto.sh``', um shell script que realizara as instalações
 e configurações basicas.
 
-Você deve editar o arquivo ``gunicorn.service``, editando ``NOME_USUARIO`` pelo nome do seu usuario na Google Cloud, 
+Você deve editar o arquivo ``gunicorn.service``, alterando ``NOME_USUARIO`` pelo nome do seu usuario na Google Cloud, 
 ``PASTA_RAIZ_PROJETO`` para o nome do diretório raiz da sua aplicação e ``PASTA_SETTINGS`` para o nome do diretório onde 
-está o seu arquivo wsgi.py, que o mesmo em que está o arquivo settings.py:
+está o seu arquivo wsgi.py, o mesmo em que está o arquivo settings.py:
 
 ````markdown
 [Unit]
@@ -150,7 +150,7 @@ echo $USER
 ````
 
 Você também deve editar o arquivo ``site_django`` substituindo ``IP_VM_GOOGLE`` pelo ip externo de sua VM Google, 
-você pode copiá-lo na mesma guia de ``Instâncias da VM``, do seu console na Google Cloud, onde realizamos a conexão com
+você pode copiá-lo na mesma guia de ``Instâncias da VM``, no seu console Google Cloud, onde realizamos a conexão com
 o servidor. Não se esqueça de editar também ``NOME_USUARIO`` e ``PASTA_RAIZ_PROJETO``
 
 ````markdown
@@ -162,7 +162,9 @@ server {
     location /staticfiles/ {
         root /home/NOME_USUARIO/PASTA_RAIZ_PROJETO;
     }
-
+    location /media {
+        alias /home/NOME_USUARIO/PASTA_RAIZ_PROJETO/media/;
+    }
     location / {
         include proxy_params;
         proxy_pass http://unix:/run/gunicorn.sock;
