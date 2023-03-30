@@ -16,14 +16,13 @@ página até `Disco de inicialização` e clique em `Mudar`:
 
 ![image-so-disco](https://user-images.githubusercontent.com/93395366/228640912-bf0444ec-eed8-40b4-8cc5-479093a927c9.jpg)
 
-
 Selecione o sistema operacional Ubuntu:
 
 ![image-so-selecao](https://user-images.githubusercontent.com/93395366/228641443-3f72a31c-6281-4f52-a17c-6a9fc7fa757a.jpg)
 
 Escolha a versão 22.04 LTS e clieque em `Selecionar`.
 
-:warning: Atenção a arquitetura x86/64.
+:warning: Fique atento e selecione a arquitetura x86/64.
 
 ![image-so-versao](https://user-images.githubusercontent.com/93395366/228641469-9df8eb2e-0324-4ff6-9ba5-120ad454c9b2.jpg)
 
@@ -42,9 +41,9 @@ Agora vamos voltar ao projeto Django e prepará-lo para o Deploy.
 
 ### Preparando o projeto
 
-* Instalando WhiteNoise e preparando e gerenciando pacotes.
+* Instalando WhiteNoise e gerenciando pacotes.
 
-Instale o middleware WhiteNoise, para gerenciamento de arquivos estáticos pelo servidor, e o psycopg2, que é o drive
+Instale o middleware WhiteNoise, para gerenciamento de arquivos estáticos pelo servidor, e o drive psycopg2, 
 para o banco de dados PostgreSQL que usaremos no servidor.
 
 ````markdown
