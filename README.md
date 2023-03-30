@@ -113,25 +113,14 @@ Para saber mais sobre o WhiteNoise confira a <a href="https://whitenoise.readthe
 
 * Criando arquivos necessários
 
-Na pasta raiz do seu projeto crie um diretório chamado ``deploy``, dentro dele criaremos alguns arquivos de configuração 
-do servidor.
+Baixe este repósitorio e copie a pasta ``deploy`` para a pasta raiz do seu projeto django. Ela contém os arquivos
+``gunicorn.socket`` e ``gunicorn.service``, que são configurações para o nosso servidor wsgi, o arquivo ``site_django``,
+contém a configuração do servidor HTTP Nginx, e o arquivo ``auto.sh``', que é um shell script que realizara as instalações
+e configurações basicas.
 
-O primeiro arquivo que você vai criar é um chamado ``gunicorn.socket`` copie e cole o código a seguir nele:
-
-````markdown
-[Unit]
-Description=gunicorn socket
-
-[Socket]
-ListenStream=/run/gunicorn.sock
-
-[Install]
-WantedBy=sockets.target
-````
-O segundo arquivo nomeie como ``gunicorn.service``, copie e cole o código a seguir nele, 
-e substituia ``NOME_USUARIO``, pelo nome do seu usuario na Google Cloud, edite também ``PASTA_RAIZ_PROJETO`` para
-o nome do diretório raiz da sua aplicação e ``PASTA_SETTINGS`` para o nome do diretório onde está o seu arquivo wsgi.py, que 
-esta na mesma pasta que o arquivo settings.py:
+Você deve editar o arquivo ``gunicorn.service``, editando ``NOME_USUARIO`` pelo nome do seu usuario na Google Cloud, 
+``PASTA_RAIZ_PROJETO`` para o nome do diretório raiz da sua aplicação e ``PASTA_SETTINGS`` para o nome do diretório onde 
+está o seu arquivo wsgi.py, que o mesmo em que está o arquivo settings.py:
 
 ````markdown
 [Unit]
@@ -160,9 +149,9 @@ digite o comando abaixo na linha de commando:
 echo $USER
 ````
 
-Crie também um arquivo com o nome ``site_django``, copie, cole e edite o código a seguir, neste arquivo. Substitua
-``IP_VM_GOOGLE`` pelo ip externo de sua VM Google, você pode copiá-lo na mesma guia de ``Instâncias da VM``, do seu
-console na Google Cloud. Não se esqueça de editar ``NOME_USUARIO`` e ``PASTA_RAIZ_PROJETO``
+Você também deve editar o arquivo ``site_django`` substituindo ``IP_VM_GOOGLE`` pelo ip externo de sua VM Google, 
+você pode copiá-lo na mesma guia de ``Instâncias da VM``, do seu console na Google Cloud, onde realizamos a conexão com
+o servidor. Não se esqueça de editar também ``NOME_USUARIO`` e ``PASTA_RAIZ_PROJETO``
 
 ````markdown
 server {
@@ -181,61 +170,11 @@ server {
 }
 ````
 
-Por ultimo, e mais importante, crie um arquivo chamado ``auto.sh``, copie e cole o código a seguir nele.
-````markdown
-#!/bin/bash/
-export PATH="/home/$USER/.local/bin:$PATH"
-cd ~ || exit
-echo "Digite o nome do banco de dados que você configurou em settings.py:"
-read -r banco_de_dados
-echo "Digite o nome de usuário que você configurou em settings.py:"
-read -r nome_usuario
-echo "Digite a senha que você configurou em settings.py:"
-read -r senha
-echo "Digite o nome da pasta raiz do seu projeto:"
-read -r projeto
-sudo apt update && sudo apt upgrade && sudo apt autoremove
-sudo apt install python3 python3-pip python3-venv python3-dev
-sudo apt install postgresql postgresql-contrib libpq-dev git curl nginx
-sudo -u postgres psql -c "CREATE DATABASE $banco_de_dados;"
-sudo -u postgres psql -c "CREATE USER $nome_usuario WITH PASSWORD '$senha';"
-sudo -u postgres psql -c "ALTER ROLE $nome_usuario SET client_encoding TO 'utf8';"
-sudo -u postgres psql -c "ALTER ROLE $nome_usuario SET default_transaction_isolation TO 'read committed';"
-sudo -u postgres psql -c "ALTER ROLE $nome_usuario SET timezone TO 'America/Sao_Paulo';"
-sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $banco_de_dados TO $nome_usuario;"
-cd "$projeto" || exit
-python3 -m venv venv
-source venv/bin/activate
-python3 -m pip install --upgrade pip wheel setuptools
-pip install gunicorn pyscopg2
-pip install django
-pip install -r requirements.txt
-python3 manage.py makemigrations
-python3 manage.py migrate
-python3 manage.py collectstatic
-python3 manage.py createsuperuser
-deactivate
-cd ~ || exit
-sudo mv -f ~/"$projeto"/deploy/temp/gunicorn.socket /etc/systemd/system
-sudo mv -f ~/"$projeto"/deploy/temp/gunicorn.service /etc/systemd/system
-sudo mv -f ~/"$projeto"/deploy/temp/site_django /etc/nginx/sites-available
-sudo ln -s /etc/nginx/sites-available/site_django /etc/nginx/sites-enabled
-sudo rm -rf ~/"$projeto"/deploy/temp
-sudo systemctl start gunicorn.socket
-sudo systemctl enable gunicorn.socket
-file /run/gunicorn.sock
-sudo systemctl daemon-reload
-sudo systemctl restart gunicorn
-sudo systemctl restart nginx && sudo systemctl restart gunicorn
-sudo ufw allow 'Nginx Full'
-sudo rm -rf ~/"$projeto"/deploy
-````
-
-Edite ou crie o seu arquivo ``.gitignore`` incluindo nele, a sua ``venv``, importante que você não leve
+Por fim, edite ou crie o seu arquivo ``.gitignore`` incluindo nele, a sua ``venv``, importante que você não leve
 a ``venv`` do projeto para o repositório dele no GitHub, nem para o servidor, para não haver conflitos entre a versão 
 do Pyhton no servidor e a que você tem instalada na sua `venv` ,por isso um novo ambiente virtual para a aplicação deve ser criado. 
 A seguir, se já tiver criado um repositório no GitHub para a sua aplicação, realize os commites incluindo os arquivos 
-que acabou de criar e realize o push das auterações. 
+que acabou de baixar e editar, realize o push das auterações. 
 Caso contrário crie o repositório para prosseguirmos com os próximos passo.
 
 ### Retornado ao Google Cloud

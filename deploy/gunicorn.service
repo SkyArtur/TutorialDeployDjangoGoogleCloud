@@ -4,14 +4,14 @@ Requires=gunicorn.socket
 After=network.target
 
 [Service]
-User=nome_usuario
+User=NOME_USUARIO
 Group=www-data
-WorkingDirectory=/home/nome_usuario/raiz_do_projeto
-ExecStart=/home/nome_usuario/raiz_do_projeto/venv/bin/gunicorn \
+WorkingDirectory=/home/NOME_USUARIO/PASTA_RAIZ_PROJETO
+ExecStart=/home/NOME_USUARIO/PASTA_RAIZ_PROJETO/venv/bin/gunicorn \
           --access-logfile - \
           --workers 3 \
           --bind unix:/run/gunicorn.sock \
-          pasta_setup_projeto.wsgi:application
+          PASTA_SETTINGS.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
