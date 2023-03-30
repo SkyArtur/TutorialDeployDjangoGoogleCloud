@@ -154,19 +154,35 @@ ExecStart=/home/NOME_USUARIO/PASTA_RAIZ_PROJETO/venv/bin/gunicorn \
 WantedBy=multi-user.target
 ````
 
-:warning: se vc esqueceu ou não sabe o seu usuário na sua VM, inicie o terminal dela como mostrado anteriormente e 
-digite o comando na linha de commando:
+:warning: Se você esqueceu ou não sabe o usuário da sua VM, inicie o terminal dela como mostrado anteriormente e 
+digite o comando abaixo na linha de commando:
 
 ````markdown
 echo $USER
 ````
 
+Crie também um arquivo com o nome ``site_django``, copie, cole e edite o código a seguir, neste arquivo. Substitua
+``IP_VM_GOOGLE`` pelo ip externo de sua VM Google, você pode copiá-lo na mesma guia de ``Instâncias da VM``, do seu
+console na Google Cloud. Não se esqueça de editar ``NOME_USUARIO`` e ``PASTA_RAIZ_PROJETO``
 
-Crie ta 
+````markdown
+server {
+    listen 80;
+    server_name IP_VM_GOOGLE;
 
-crie outro diretório chamado ``temp`` dentro do diretório ``deploy``
-um arquivo chamado ``auto.sh``, copie 
-e cole o código a seguir nele.
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /staticfiles/ {
+        root /home/NOME_USUARIO/PASTA_RAIZ_PROJETO;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/gunicorn.sock;
+    }
+}
+````
+
+Por ultimo, e mais importante, crie um arquivo chamado ``auto.sh``, copie e cole o código a seguir nele.
 ````markdown
 #!/bin/bash/
 export PATH="/home/$USER/.local/bin:$PATH"
@@ -203,8 +219,8 @@ deactivate
 cd ~ || exit
 sudo mv -f ~/"$projeto"/deploy/temp/gunicorn.socket /etc/systemd/system
 sudo mv -f ~/"$projeto"/deploy/temp/gunicorn.service /etc/systemd/system
-sudo mv -f ~/"$projeto"/deploy/temp/"$projeto" /etc/nginx/sites-available
-sudo ln -s /etc/nginx/sites-available/"$projeto" /etc/nginx/sites-enabled
+sudo mv -f ~/"$projeto"/deploy/temp/site_django /etc/nginx/sites-available
+sudo ln -s /etc/nginx/sites-available/site_django /etc/nginx/sites-enabled
 sudo rm -rf ~/"$projeto"/deploy/temp
 sudo systemctl start gunicorn.socket
 sudo systemctl enable gunicorn.socket
@@ -213,14 +229,28 @@ sudo systemctl daemon-reload
 sudo systemctl restart gunicorn
 sudo systemctl restart nginx && sudo systemctl restart gunicorn
 sudo ufw allow 'Nginx Full'
+sudo rm -rf ~/"$projeto"/deploy
 ````
 
-
 Edite ou crie o seu arquivo ``.gitignore`` incluindo nele, a sua ``venv``, importante que você não leve
-a ``venv`` do projeto para o repositório dele no GitHub, para não haver conflitos entre a versão do servidor e a que 
-você tem instalada na sua `venv` ,por isso um novo ambiente virtual para a aplicação deve ser criado. 
-A seguir, se já tiver criado um repositório no GitHub para a sua aplicação, realize os commites e o push das auterações. 
+a ``venv`` do projeto para o repositório dele no GitHub, nem para o servidor, para não haver conflitos entre a versão 
+do Pyhton no servidor e a que você tem instalada na sua `venv` ,por isso um novo ambiente virtual para a aplicação deve ser criado. 
+A seguir, se já tiver criado um repositório no GitHub para a sua aplicação, realize os commites incluindo os arquivos 
+que acabou de criar e realize o push das auterações. 
 Caso contrário crie o repositório para prosseguirmos com os próximos passo.
 
 ### Retornado ao Google Cloud
 
+Abra o terminal da sua VM no Google Cloud e clone o seu repositorio com o comando
+
+````markdown
+git clone URL_DO_REPOSITORIO
+````
+ 
+Em seguida digite:
+
+````markdown
+bash ~/PASTA_RAIZ_PROJETO/deploy/auto.sh
+````
+
+Preencha corretamente os requisitos, confirme as alterações e aguarde o final do processo.
