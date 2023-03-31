@@ -30,7 +30,7 @@ Marque as caixas de seleção para permitir coneção na porta :80(HTTP) e :443(
 
 ![image-so-criar](https://user-images.githubusercontent.com/93395366/228641659-b8e2337f-3604-45ce-8813-3de546d57205.jpg)
 
-Na tela de Instâncias da VM, vá até a guia ``conectar``, que inclusve, eatá ao lado do IP externo da sua VM, e clique em ``SSH``.
+Na tela de Instâncias da VM, vá até a guia ``conectar``, que inclusve, está ao lado do IP externo da sua VM, e clique em ``SSH``.
 
 ![abrindo-ssh](https://user-images.githubusercontent.com/93395366/228711479-11f48e66-8292-4ece-ae54-1a5009105b9b.png)
 
