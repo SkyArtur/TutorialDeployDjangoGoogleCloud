@@ -64,6 +64,13 @@ Assegure-se de mudar a variável ``DEBUG`` para ``False``
 DEBUG = False
 ```
 
+Inclua em ``ALLOWED_HOSTS``  o ip externo de sua VM Google Cloud, você pode copiá-lo na mesma guia de ``Instâncias da VM``
+onde realizamos a conexão com o servidor.
+
+````markdown
+ALLOWED_HOSTS = ['localhost', 'ip_google_cloud_aqui']
+````
+
 Edite a variável ``DATABASES`` para o seu novo banco de dados PostgreSQL. Realize as alterações necessárias em
 ``NAME``, ``USER`` e ``PASSWORD``, e guarde estas informações, pois, elas serão solicitadas mais adiante.
 
@@ -149,9 +156,8 @@ digite o comando abaixo na linha de commando:
 echo $USER
 ````
 
-Você também deve editar o arquivo ``site_django`` substituindo ``IP_VM_GOOGLE`` pelo ip externo de sua VM Google, 
-você pode copiá-lo na mesma guia de ``Instâncias da VM``, no seu console Google Cloud, onde realizamos a conexão com
-o servidor. Não se esqueça de editar também ``NOME_USUARIO`` e ``PASTA_RAIZ_PROJETO``
+Você também deve editar o arquivo ``site_django`` substituindo ``IP_VM_GOOGLE`` pelo ip externo de sua VM Google. 
+ Não se esqueça de editar também ``NOME_USUARIO`` e ``PASTA_RAIZ_PROJETO``
 
 ````markdown
 server {
@@ -192,5 +198,6 @@ Em seguida digite:
 ````markdown
 bash ~/PASTA_RAIZ_PROJETO/deploy/auto.sh
 ````
-
-Preencha corretamente os requisitos, confirme as alterações e aguarde o final do processo.
+* Obsevações
+  * Preencha corretamente os requisitos, confirme as alterações e aguarde o final do processo.
+  * Se tudo ocorrer como planejado :pray:, sua aplicação estará disponivel na porta 80(HTTP).
