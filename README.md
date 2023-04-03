@@ -3,11 +3,11 @@
 ### Google Cloud
 
 Faça sua inscrição na plataforma Google Cloud e ative o seu período de avaliação, preencha seus dados, entre na plataforma
-e ative o serviço de instâncias VM seguindo até o menu 'hamburguer' no canto superior esquedo da página.
+e ative o serviço de ``instâncias da VM`` seguindo até o menu 'hamburguer' no canto superior esquedo da página.
 
 ![iniciando-VM](https://user-images.githubusercontent.com/93395366/228640782-5cee4061-5e5f-450d-9b83-93c1271f5797.jpg)
 
-Após a ativação do serviço, siga pelo mesmo caminho até `instâncias VM` e clique em `Criar instâcia`. 
+Após a ativação do serviço, siga pelo mesmo caminho até `instâncias da VM` e clique em `Criar instâcia`. 
 
 ![criando-vm](https://user-images.githubusercontent.com/93395366/228641616-658411f6-9819-4f10-8346-06acb9297ff2.jpg)
 
@@ -30,7 +30,7 @@ Marque as caixas de seleção para permitir coneção na porta :80(HTTP) e :443(
 
 ![image-so-criar](https://user-images.githubusercontent.com/93395366/228641659-b8e2337f-3604-45ce-8813-3de546d57205.jpg)
 
-Na tela de Instâncias da VM, vá até a guia ``conectar``, que inclusve, está ao lado do IP externo da sua VM, e clique em ``SSH``.
+Na tela de ``Instâncias da VM``, vá até a guia ``conectar``, que inclusve, está ao lado do IP externo da sua VM, e clique em ``SSH``.
 
 ![abrindo-ssh](https://user-images.githubusercontent.com/93395366/228711479-11f48e66-8292-4ece-ae54-1a5009105b9b.png)
 
@@ -180,20 +180,21 @@ server {
 
 Por fim, edite ou crie o seu arquivo ``.gitignore`` incluindo nele, a sua ``venv``, importante que você não leve
 a ``venv`` do projeto para o repositório dele no GitHub, nem para o servidor, para não haver conflitos entre a versão 
-do Pyhton no servidor e a que você tem instalada na sua `venv` ,por isso um novo ambiente virtual para a aplicação deve ser criado. 
+do Pyhton no servidor e a que você tem instalada na sua `venv`, por isso, um novo ambiente virtual para a aplicação será criado. 
 A seguir, se já tiver criado um repositório no GitHub para a sua aplicação, realize os commites incluindo os arquivos 
 que acabou de baixar e editar, realize o push das auterações. 
 Caso contrário crie o repositório para prosseguirmos com os próximos passo.
 
 ### Retornado ao Google Cloud
 
-Abra o terminal da sua VM no Google Cloud e clone o seu repositorio com o comando
+Abra o terminal da sua VM no Google Cloud e clone o seu repositorio com o comando alterando ``URL_DO_REPOSITORIO``
+para a url da sua aplicação no GitHub.
 
 ````markdown
 git clone URL_DO_REPOSITORIO
 ````
  
-Em seguida digite:
+Em seguida digite alterando ``PASTA_RAIZ_PROJETO`` pelo nome do diretório raiz de sua aplicação django:
 
 ````markdown
 bash ~/PASTA_RAIZ_PROJETO/deploy/auto.sh
@@ -201,3 +202,9 @@ bash ~/PASTA_RAIZ_PROJETO/deploy/auto.sh
 * Obsevações
   * Preencha corretamente os requisitos, confirme as alterações e aguarde o final do processo.
   * Se tudo ocorrer como planejado :pray:, sua aplicação estará disponivel na porta 80(HTTP).
+  * :warning: Este tutorial configura um servidor HTTP simples. Certificações SSL, e demais configurações de 
+  segurança, não fazem parte do escopo deste tutorial. Para saber mais confira o artigo deste 
+  <a href="https://www.kaspersky.com.br/resource-center/definitions/what-is-a-ssl-certificate">link.</a>
+
+### Referência
+Este tutorial tem como base o conteúdo no site da <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-22-04">Digital Ocean.</a>

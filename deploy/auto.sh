@@ -1,4 +1,6 @@
 #!/bin/bash/
+
+# os comandos neste sprit podem ser digitados diretamente no terminal
 # exportando PATH do usuário
 ip=$(curl -s http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip -H "Metadata-Flavor: Google")
 export PATH="/home/$USER/.local/bin:$PATH"
@@ -16,7 +18,7 @@ read -r projeto
 sudo apt update && sudo apt upgrade && sudo apt autoremove
 sudo apt install python3 python3-pip python3-venv python3-dev
 sudo apt install postgresql postgresql-contrib libpq-dev git curl nginx
-
+# Criando banco de dados da aplicação.
 sudo -u postgres psql -c "CREATE DATABASE $banco_de_dados;"
 sudo -u postgres psql -c "CREATE USER $nome_usuario WITH PASSWORD '$senha';"
 sudo -u postgres psql -c "ALTER ROLE $nome_usuario SET client_encoding TO 'utf8';"
@@ -43,6 +45,7 @@ sudo mv -f ~/"$projeto"/deploy/gunicorn.socket /etc/systemd/system
 sudo mv -f ~/"$projeto"/deploy/gunicorn.service /etc/systemd/system
 sudo mv -f ~/"$projeto"/deploy/site_django /etc/nginx/sites-available
 sudo ln -s /etc/nginx/sites-available/site_django /etc/nginx/sites-enabled
+sudo rm -rf /etc/nginx/sites-enabled/default
 # iniciando serviços
 sudo systemctl start gunicorn.socket
 sudo systemctl enable gunicorn.socket
