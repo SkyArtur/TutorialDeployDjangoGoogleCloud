@@ -1,15 +1,15 @@
 #!/bin/bash/
 ###########################################################################################
 #
-# auto.sh - Script para deploy automatico.
+# auto.sh - Script para configuração automática de Servidor Nginx.
 #
 # Autor: Artur dos Santos Shon (sky_artur@hotmail.com)
 # Data de Criação: 02/04/2023
 #
 # Descrição: Script de instalação básica em uma VM, de um servidor Nginx para deploy de
-# aplicações Django.
+# aplicações Django. Aplicação disponível na porta ::80 (http)
 #
-# Exemplo de uso: :bash ~/PASTA_RAIZ_PROJETO/deploy/auto.sh
+# Exemplo de uso: bash ~/PASTA_RAIZ_PROJETO/deploy/auto.sh
 #
 # Observação:
 #       Os comandos neste sprit podem ser digitados diretamente no terminal.
