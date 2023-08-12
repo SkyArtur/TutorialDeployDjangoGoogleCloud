@@ -25,7 +25,7 @@ cd ~ || exit
 
 # Coletando dados para o banco de dados e arquivamento.
 echo "Digite o nome do banco de dados que você configurou em settings.py:"
-read -r BANCO_DE_DADOS
+read -r BANCO_DADOS
 echo "Digite o nome de usuário que você configurou em settings.py:"
 read -r USUARIO
 echo "Digite a senha que você configurou em settings.py:"
@@ -34,17 +34,19 @@ echo "Digite o nome da pasta raiz do seu projeto:"
 read -r PROJETO
 
 # Realizando updates, atualizações e instalações importantes
-sudo apt update && sudo apt upgrade && sudo apt autoremove
-sudo apt install python3 python3-pip python3-venv python3-dev
-sudo apt install postgresql postgresql-contrib libpq-dev git curl nginx
+sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
+sudo apt install python3 python3-pip python3-venv python3-dev -y
+sudo apt install postgresql postgresql-contrib libpq-dev git curl nginx -y
 
 # Criando banco de dados da aplicação.
-sudo -u postgres psql -c "CREATE DATABASE $BANCO_DE_DADOS;"
-sudo -u postgres psql -c "CREATE USER $USUARIO WITH PASSWORD '$SENHA';"
-sudo -u postgres psql -c "ALTER ROLE $USUARIO SET client_encoding TO 'utf8';"
-sudo -u postgres psql -c "ALTER ROLE $USUARIO SET default_transaction_isolation TO 'read committed';"
-sudo -u postgres psql -c "ALTER ROLE $USUARIO SET timezone TO 'America/Sao_Paulo';"
-sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $BANCO_DE_DADOS TO $USUARIO;"
+sudo -u postgres psql <<EOF
+CREATE ROLE $USUARIO WITH SUPERUSER LOGIN INHERIT CREATEDB CREATEROLE REPLICATION BYPASSRLS PASSWORD '$SENHA';
+CREATE DATABASE $BANCO_DADOS WITH OWNER $USUARIO;
+ALTER ROLE $USUARIO SET client_encoding TO 'utf8';
+ALTER ROLE $USUARIO SET default_transaction_isolation TO 'read committed';
+ALTER ROLE $USUARIO SET timezone TO 'America/Sao_Paulo';
+GRANT ALL PRIVILEGES ON DATABASE $BANCO_DADOS TO $USUARIO;
+EOF
 cd "$PROJETO" || exit
 
 # Preparando o ambiente virtual da aplicação.
