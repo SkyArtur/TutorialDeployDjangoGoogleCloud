@@ -46,13 +46,13 @@ Agora vamos voltar ao projeto Django e prepará-lo para o Deploy.
 Instale o middleware WhiteNoise, para gerenciamento de arquivos estáticos pelo servidor, e o drive psycopg2, 
 para o banco de dados PostgreSQL que usaremos no servidor.
 
-````markdown
+````shell
 pip install whitenoise psycopg2
 ````
 
 Gerencie os pacotes (Python) de seu projeto.
 
-````markdown
+````shell
 pip freeze > requirements.txt
 ````
 
@@ -60,21 +60,21 @@ pip freeze > requirements.txt
 
 Assegure-se de mudar a variável ``DEBUG`` para ``False``
 
-```
+```python
 DEBUG = False
 ```
 
 Inclua em ``ALLOWED_HOSTS``  o ip externo de sua VM Google Cloud, você pode copiá-lo na mesma guia de ``Instâncias da VM``
 onde realizamos a conexão com o servidor.
 
-````markdown
+````python
 ALLOWED_HOSTS = ['localhost', 'ip_google_cloud_aqui']
 ````
 
 Edite a variável ``DATABASES`` para o seu novo banco de dados PostgreSQL. Realize as alterações necessárias em
 ``NAME``, ``USER`` e ``PASSWORD``, e guarde estas informações, pois, elas serão solicitadas mais adiante.
 
-````
+````python
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -90,7 +90,7 @@ DATABASES = {
 Em ``MIDDLEWARE`` coloque o WhiteNoise logo após ``django.middleware.security.SecurityMiddleware``.
 Não copie o código a seguir, ele apenas exemplifica a prosição em que o WitheNoise deve ficar entre os demais middlewares
 
-````
+````python
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -102,7 +102,7 @@ MIDDLEWARE = [
 
 Coloque o código a seguir no corpo de seu arquivo settings.py logo acima da sua configuração de `STATIC_URL`.
 
-```
+```python
 STORAGES = {
     'staticfiles': {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -112,7 +112,7 @@ STORAGES = {
 
 Altere sua ``STATIC_ROOT`` para ``staticfiles``, não altere a ``STATIC_URL``.
 
-```
+```python
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 ```
 
@@ -129,7 +129,7 @@ Você deve editar o arquivo ``gunicorn.service``, alterando ``NOME_USUARIO`` pel
 ``PASTA_RAIZ_PROJETO`` para o nome do diretório raiz da sua aplicação e ``PASTA_SETTINGS`` para o nome do diretório onde 
 está o seu arquivo wsgi.py, o mesmo em que está o arquivo settings.py:
 
-````markdown
+````shell
 [Unit]
 Description=gunicorn daemon
 Requires=gunicorn.socket
@@ -152,14 +152,14 @@ WantedBy=multi-user.target
 :warning: Se você esqueceu ou não sabe o usuário da sua VM, inicie o terminal dela como mostrado anteriormente e 
 digite o comando abaixo na linha de commando:
 
-````markdown
+````shell
 echo $USER
 ````
 
 Você também deve editar o arquivo ``site_django`` substituindo ``IP_VM_GOOGLE`` pelo ip externo de sua VM Google. 
  Não se esqueça de editar também ``NOME_USUARIO`` e ``PASTA_RAIZ_PROJETO``
 
-````markdown
+````shell
 server {
     listen 80;
     server_name IP_VM_GOOGLE;
@@ -190,13 +190,13 @@ Caso contrário crie o repositório para prosseguirmos com os próximos passo.
 Abra o terminal da sua VM no Google Cloud e clone o seu repositorio com o comando alterando ``URL_DO_REPOSITORIO``
 para a url da sua aplicação no GitHub.
 
-````markdown
+````shell
 git clone URL_DO_REPOSITORIO
 ````
  
 Em seguida digite alterando ``PASTA_RAIZ_PROJETO`` pelo nome do diretório raiz de sua aplicação django:
 
-````markdown
+````shell
 bash ~/PASTA_RAIZ_PROJETO/deploy/auto.sh
 ````
 * Obsevações
